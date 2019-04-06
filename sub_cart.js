@@ -22,7 +22,7 @@
 
 */
 
-window.addEventListener("load", setupCart);
+window.onload = setupCart;
 
 //this function defines the event handlers for the Add to Order buttons on the page
 function setupCart() {
@@ -37,8 +37,26 @@ function setupCart() {
 //This item adds items to the shopping cart on the page
 function addItem(e) {
       var foodItem = e.target.nextElementSibling;
-      var foodID = document.setAttribute("id", foodItem);
+      var foodID = foodItem.getAttribute("id");
       //this code create a copy of the foodItem element and all of its descendants
-      var foodDescription = foodItem.cloneNode;
+      var foodDescription = foodItem.cloneNode(true);
+      var cartBox = document.getElementById("cart");
+      // this determines whether a product ordered by the customer has already been ordered
+      var duplicateOrder = false;
+      for (var n = cartBox.firstChild; n = n.nextElementSibling; n !== null) {
+            // this determines whether the ID of the element node equals foodID 
+            if (n.id === foodID) {
+                  duplicateOrder = true;
+                  n.firstElementChild.textContent++;
+                  break;
+            }
+      }
 
+      //This if condition test whether duplicateOrder is false
+      if (duplicateOrder === false) {
+            var orderCount = document.createElement("span");
+            orderCount.textContent = "1";
+            foodDescription.insertBefore(orderCount, foodDescription.firstChild);
+            cartBox.appendChild(foodDescription);
+      }
 }
